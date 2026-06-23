@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -358,9 +359,11 @@
             <h4 style="color:var(--primary-green); margin-bottom:5px;">तालिका (Row 1)</h4>
             <div class="table-input-group">
                 <input type="text" id="t1SubDist" placeholder="Sub Dist" value="MOHANIA">
+                <input type="text" id="t1vill" placeholder="Vill" value="Mahuar">
                 <input type="text" id="t1Sno" placeholder="S.No" value="3696" style="margin-top:5px;">
                 <input type="text" id="t1Area" placeholder="Area" value="0.008000" style="margin-top:5px;">
             </div>
+            
 
             <button class="print-btn" onclick="window.print()">Card प्रिंट करें</button>
         </div>
@@ -446,7 +449,7 @@
                                 <td>BIHAR</td>
                                 <td>KAIMUR</td>
                                 <td id="cardT1Sub">MOHANIA</td>
-                                <td>MAHUAR</td>
+                                <td id="cardT1vill">MAHUAR</td>
                                 <td id="cardT1Sno">3696</td>
                                 <td>*</td>
                                 <td class="area-col" id="cardT1Area">0.008000</td>
@@ -485,6 +488,7 @@
             
             // टेबल डेटा अपडेट
             document.getElementById('cardT1Sub').innerText = document.getElementById('t1SubDist').value.toUpperCase();
+            document.getElementById('cardT1vill').innerText = document.getElementById('t1vill').value;
             document.getElementById('cardT1Sno').innerText = document.getElementById('t1Sno').value;
             document.getElementById('cardT1Area').innerText = document.getElementById('t1Area').value;
         }

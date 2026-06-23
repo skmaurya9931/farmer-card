@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agri Card Generator</title>
+    <title>Agri Card Generator - Fixed</title>
     <style>
         :root {
             --primary-green: #1b7343;
@@ -64,6 +64,7 @@
             border: 1px solid #ccc;
             border-radius: 6px;
             box-sizing: border-box;
+            font-size: 14px;
         }
 
         .table-input-group {
@@ -83,7 +84,7 @@
 
         .agri-card {
             width: 500px;
-            height: 315px; /* Standard PVC Ratio */
+            height: 315px;
             background: white;
             border-radius: 18px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
@@ -94,17 +95,6 @@
             justify-content: space-between;
             box-sizing: border-box;
             border: 1px solid #ddd;
-        }
-
-        /* Decorative Leaves background effect */
-        .agri-card::before {
-            content: '🍃';
-            position: absolute;
-            right: -10px;
-            top: -10px;
-            font-size: 80px;
-            opacity: 0.15;
-            pointer-events: none;
         }
 
         /* Top Header */
@@ -138,7 +128,7 @@
         .card-body-front {
             display: flex;
             padding: 0 20px;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
             flex-grow: 1;
         }
@@ -153,7 +143,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .photo-box img {
@@ -187,7 +176,7 @@
         }
 
         .info-table td {
-            padding: 3px 0;
+            padding: 2px 0;
             vertical-align: top;
         }
 
@@ -208,10 +197,12 @@
             border: 1px solid #ccc;
             border-radius: 8px;
             padding: 5px;
-            background: white;
+            background: #fafafa;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 10px;
+            text-align: center;
         }
         
         .qr-box img {
@@ -296,14 +287,6 @@
             color: #333;
         }
 
-        .land-table tr:nth-child(even) {
-            background-color: #f9fbf9;
-        }
-
-        .area-col {
-            color: var(--primary-green) !important;
-        }
-
         /* Print Button */
         .print-btn {
             background: var(--primary-green);
@@ -316,29 +299,12 @@
             font-weight: bold;
             width: 100%;
             margin-top: 10px;
-            transition: 0.3s;
-        }
-        .print-btn:hover {
-            background: #13522f;
         }
 
-        /* Print Hide Controls */
         @media print {
-            .form-container, h2, .print-btn {
-                display: none;
-            }
-            body {
-                background: white;
-                padding: 0;
-            }
-            .container {
-                gap: 50px;
-            }
-            .agri-card {
-                box-shadow: none;
-                border: 1px solid #999;
-                page-break-inside: avoid;
-            }
+            .form-container, h2, .print-btn { display: none; }
+            body { background: white; padding: 0; }
+            .agri-card { box-shadow: none; border: 1px solid #999; page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -348,6 +314,7 @@
 
     <div class="container">
         
+        <!-- INPUT FORM -->
         <div class="form-container">
             <h3 style="margin-top:0; color:var(--primary-green);">विवरण दर्ज करें</h3>
             
@@ -364,16 +331,12 @@
                 <input type="text" id="inputNameHi" value="सुशीला देवी">
             </div>
             <div class="form-group">
-                <label>जन्म तिथि (DD/MM/YY)</label>
+                <label>जन्म तिथि</label>
                 <input type="text" id="inputDob" value="01/01/64">
             </div>
             <div class="form-group">
                 <label>लिंग (Gender)</label>
-                <select id="inputGender">
-                    <option value="Female" selected>Female</option>
-                    <option value="Male">Male</option>
-                    <option value="Other">Other</option>
-                </select>
+                <input type="text" id="inputGender" value="Female">
             </div>
             <div class="form-group">
                 <label>मोबाइल नंबर</label>
@@ -392,26 +355,21 @@
                 <input type="text" id="inputAddress" value="Village - Mahuar, Post- Sahuka , Dist. - Kaimur, Bihar">
             </div>
 
-            <h4 style="color:var(--primary-green); margin-bottom:5px;">जमीन विवरण तालिका (Row 1)</h4>
+            <h4 style="color:var(--primary-green); margin-bottom:5px;">तालिका (Row 1)</h4>
             <div class="table-input-group">
-                <input type="text" id="t1SubDist" placeholder="Sub Dist (e.g. MOHANIA)" value="MOHANIA" style="margin-bottom:5px;">
-                <input type="text" id="t1Sno" placeholder="S.No" value="3696" style="width:48%; margin-right:2%;">
-                <input type="text" id="t1Area" placeholder="Area" value="0.008000" style="width:48%;">
+                <input type="text" id="t1SubDist" placeholder="Sub Dist" value="MOHANIA">
+                <input type="text" id="t1Sno" placeholder="S.No" value="3696" style="margin-top:5px;">
+                <input type="text" id="t1Area" placeholder="Area" value="0.008000" style="margin-top:5px;">
             </div>
 
-            <h4 style="color:var(--primary-green); margin-bottom:5px;">जमीन विवरण तालिका (Row 2)</h4>
-            <div class="table-input-group">
-                <input type="text" id="t2SubDist" placeholder="Sub Dist" value="MOHANIA" style="margin-bottom:5px;">
-                <input type="text" id="t2Sno" placeholder="S.No" value="3697" style="width:48%; margin-right:2%;">
-                <input type="text" id="t2Area" placeholder="Area" value="0.006000" style="width:48%;">
-            </div>
-
-            <button class="print-btn" onclick="window.print()">Card प्रिंट / PDF सेव करें</button>
+            <button class="print-btn" onclick="window.print()">Card प्रिंट करें</button>
         </div>
 
+        <!-- LIVE PREVIEW OF CARDS -->
         <div class="preview-container">
             
-            <div class="agri-card" id="cardFront">
+            <!-- FRONT CARD -->
+            <div class="agri-card">
                 <div class="card-header">
                     <div class="logo-area">Agri <span>Card</span></div>
                     <div class="header-title-hi">मेरा किसान कार्ड</div>
@@ -419,7 +377,8 @@
 
                 <div class="card-body-front">
                     <div class="photo-box">
-                        <img id="cardPhoto" src="https://via.placeholder.com/105x125?text=Photo" alt="Farmer Photo">
+                        <img id="cardPhoto" src="" alt="फोटो यहाँ दिखेगी" style="display:none;">
+                        <span id="photoPlaceholder" style="color:#aaa; font-size:12px;">No Image</span>
                     </div>
                     <div class="details-box">
                         <div class="farmer-name-en" id="cardNameEn">Sushila Devi</div>
@@ -444,8 +403,8 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="qr-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=80869166297" id="cardQr" alt="QR Code">
+                    <div class="qr-box" id="qrBox">
+                        QR Code
                     </div>
                 </div>
 
@@ -459,13 +418,14 @@
                 </div>
             </div>
 
-            <div class="agri-card" id="cardBack">
+            <!-- BACK CARD -->
+            <div class="agri-card">
                 <div class="card-header">
                     <div class="logo-area">Agri <span>Card</span></div>
                 </div>
 
                 <div class="address-text">
-                    <span>पता:</span> <span id="cardAddress" style="color:#222;">Village - Mahuar, Post- Sahuka , Dist. - Kaimur, Bihar</span>
+                    <span>पता:</span> <span id="cardAddress" style="color:#222; font-weight:normal;">Village - Mahuar, Post- Sahuka , Dist. - Kaimur, Bihar</span>
                 </div>
 
                 <div class="data-table-container">
@@ -491,15 +451,6 @@
                                 <td>*</td>
                                 <td class="area-col" id="cardT1Area">0.008000</td>
                             </tr>
-                            <tr>
-                                <td>BIHAR</td>
-                                <td>KAIMUR</td>
-                                <td id="cardT2Sub">MOHANIA</td>
-                                <td>MAHUAR</td>
-                                <td id="cardT2Sno">3697</td>
-                                <td>*</td>
-                                <td class="area-col" id="cardT2Area">0.006000</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -513,71 +464,54 @@
         </div>
     </div>
 
+    <!-- JAVASCRIPT FOR IMMEDIATE UPDATE -->
     <script>
-        // DOM Elements
-        const inputPhoto = document.getElementById('inputPhoto');
-        const inputNameEn = document.getElementById('inputNameEn');
-        const inputNameHi = document.getElementById('inputNameHi');
-        const inputDob = document.getElementById('inputDob');
-        const inputGender = document.getElementById('inputGender');
-        const inputMobile = document.getElementById('inputMobile');
-        const inputAadhar = document.getElementById('inputAadhar');
-        const inputFarmerId = document.getElementById('inputFarmerId');
-        const inputAddress = document.getElementById('inputAddress');
+        // सभी इनपुट फील्ड्स को ट्रैक करने के लिए फंक्शन
+        function updateCard() {
+            document.getElementById('cardNameEn').innerText = document.getElementById('inputNameEn').value;
+            document.getElementById('cardNameHi').innerText = document.getElementById('inputNameHi').value;
+            document.getElementById('cardDob').innerText = document.getElementById('inputDob').value;
+            document.getElementById('cardGender').innerText = document.getElementById('inputGender').value;
+            document.getElementById('cardMobile').innerText = document.getElementById('inputMobile').value;
+            document.getElementById('cardAadhar').innerText = document.getElementById('inputAadhar').value;
+            
+            let fid = document.getElementById('inputFarmerId').value;
+            document.getElementById('cardFarmerId').innerText = fid;
+            
+            // QR Code API अपडेट
+            document.getElementById('qrBox').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${fid}" alt="QR">`;
 
-        const t1SubDist = document.getElementById('t1SubDist');
-        const t1Sno = document.getElementById('t1Sno');
-        const t1Area = document.getElementById('t1Area');
-        
-        const t2SubDist = document.getElementById('t2SubDist');
-        const t2Sno = document.getElementById('t2Sno');
-        const t2Area = document.getElementById('t2Area');
+            document.getElementById('cardAddress').innerText = document.getElementById('inputAddress').value;
+            
+            // टेबल डेटा अपडेट
+            document.getElementById('cardT1Sub').innerText = document.getElementById('t1SubDist').value.toUpperCase();
+            document.getElementById('cardT1Sno').innerText = document.getElementById('t1Sno').value;
+            document.getElementById('cardT1Area').innerText = document.getElementById('t1Area').value;
+        }
 
-        // Card Preview Elements
-        const cardPhoto = document.getElementById('cardPhoto');
-        const cardNameEn = document.getElementById('cardNameEn');
-        const cardNameHi = document.getElementById('cardNameHi');
-        const cardDob = document.getElementById('cardDob');
-        const cardGender = document.getElementById('cardGender');
-        const cardMobile = document.getElementById('cardMobile');
-        const cardAadhar = document.getElementById('cardAadhar');
-        const cardFarmerId = document.getElementById('cardFarmerId');
-        const cardQr = document.getElementById('cardQr');
-        const cardAddress = document.getElementById('cardAddress');
-
-        const cardT1Sub = document.getElementById('cardT1Sub');
-        const cardT1Sno = document.getElementById('cardT1Sno');
-        const cardT1Area = document.getElementById('cardT1Area');
-
-        const cardT2Sub = document.getElementById('cardT2Sub');
-        const cardT2Sno = document.getElementById('cardT2Sno');
-        const cardT2Area = document.getElementById('cardT2Area');
-
-        // Event Listeners for Live Sync
-        inputNameEn.addEventListener('input', () => cardNameEn.textContent = inputNameEn.value);
-        inputNameHi.addEventListener('input', () => cardNameHi.textContent = inputNameHi.value);
-        inputDob.addEventListener('input', () => cardDob.textContent = inputDob.value);
-        inputGender.addEventListener('change', () => cardGender.textContent = inputGender.value);
-        inputMobile.addEventListener('input', () => cardMobile.textContent = inputMobile.value);
-        inputAadhar.addEventListener('input', () => cardAadhar.textContent = inputAadhar.value);
-        
-        inputFarmerId.addEventListener('input', () => {
-            cardFarmerId.textContent = inputFarmerId.value;
-            // Dynamically update QR code based on Farmer ID
-            cardQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(inputFarmerId.value)}`;
+        // सभी इनपुट बॉक्स पर 'input' इवेंट लिस्नर लगाना ताकि तुरंत काम करे
+        const inputs = document.querySelectorAll('.form-container input');
+        inputs.forEach(input => {
+            input.addEventListener('input', updateCard);
         });
 
-        inputAddress.addEventListener('input', () => cardAddress.textContent = inputAddress.value);
+        // फोटो अपलोड को मैनेज करना
+        document.getElementById('inputPhoto').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('cardPhoto');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('photoPlaceholder').style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
 
-        // Table Row 1 Sync
-        t1SubDist.addEventListener('input', () => cardT1Sub.textContent = t1SubDist.value.toUpperCase());
-        t1Sno.addEventListener('input', () => cardT1Sno.textContent = t1Sno.value);
-        t1Area.addEventListener('input', () => cardT1Area.textContent = t1Area.value);
-
-        // Table Row 2 Sync
-        t2SubDist.addEventListener('input', () => cardT2Sub.textContent = t2SubDist.value.toUpperCase());
-        t2Sno.addEventListener('input', () => cardT2Sno.textContent = t2Sno.value);
-        t2Area.addEventListener('input', () => cardT2Area.textContent = t2Area.value);
-
-        // Image Upload Handling
-        inputPhoto.addEventListen
+        // पेज लोड होते ही पहली बार कार्ड का डेटा भरने के लिए रन करें
+        window.onload = updateCard;
+    </script>
+</body>
+</html>

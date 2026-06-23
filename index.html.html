@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agri Card Generator</title>
+    <style>
+        :root {
+            --primary-green: #1b7343;
+            --light-green: #eaf5ee;
+            --accent-yellow: #b0af22;
+            --text-dark: #222;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: var(--primary-green);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Form Styling */
+        .form-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .table-input-group {
+            border: 1px dashed #1b7343;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            background: #fdfdfd;
+        }
+
+        /* Card Preview Styling */
+        .preview-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .agri-card {
+            width: 500px;
+            height: 315px; /* Standard PVC Ratio */
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+        }
+
+        /* Decorative Leaves background effect */
+        .agri-card::before {
+            content: '🍃';
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            font-size: 80px;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Top Header */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px 5px 20px;
+        }
+
+        .logo-area {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-green);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logo-area span {
+            color: var(--accent-yellow);
+        }
+
+        .header-title-hi {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+
+        /* Main Content Front */
+        .card-body-front {
+            display: flex;
+            padding: 0 20px;
+            gap: 20px;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .photo-box {
+            width: 105px;
+            height: 125px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .details-box {
+            flex-grow: 1;
+        }
+
+        .farmer-name-en {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .farmer-name-hi {
+            font-size: 20px;
+            color: var(--primary-green);
+            font-weight: bold;
+            margin: 2px 0 10px 0;
+        }
+
+        .info-table {
+            width: 100%;
+            font-size: 14px;
+            border-collapse: collapse;
+        }
+
+        .info-table td {
+            padding: 3px 0;
+            vertical-align: top;
+        }
+
+        .info-table td.label {
+            color: #666;
+            font-weight: bold;
+            width: 65px;
+        }
+
+        .info-table td.value {
+            color: #111;
+            font-weight: 600;
+        }
+
+        .qr-box {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 5px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Farmer ID Bar */
+        .farmer-id-bar {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            text-align: center;
+            padding: 4px 15px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #333;
+            width: fit-content;
+            margin: 0 auto 5px auto;
+        }
+
+        /* Card Footer */
+        .card-footer {
+            background: var(--primary-green);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 20px;
+            font-size: 11px;
+            font-style: italic;
+        }
+
+        .card-footer .footer-right {
+            font-style: normal;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        .card-footer .footer-right span {
+            color: var(--accent-yellow);
+        }
+
+        /* BACK CARD SPECIFIC */
+        .address-text {
+            padding: 0 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-top: 5px;
+        }
+        
+        .address-text span {
+            color: var(--primary-green);
+        }
+
+        .data-table-container {
+            padding: 0 20px;
+            flex-grow: 1;
+            margin-top: 10px;
+        }
+
+        .land-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .land-table th {
+            background: #e2efe7;
+            color: var(--primary-green);
+            font-weight: bold;
+            padding: 6px;
+            border: 1px solid #bcdac7;
+        }
+
+        .land-table td {
+            padding: 6px;
+            border: 1px solid #bcdac7;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .land-table tr:nth-child(even) {
+            background-color: #f9fbf9;
+        }
+
+        .area-col {
+            color: var(--primary-green) !important;
+        }
+
+        /* Print Button */
+        .print-btn {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        .print-btn:hover {
+            background: #13522f;
+        }
+
+        /* Print Hide Controls */
+        @media print {
+            .form-container, h2, .print-btn {
+                display: none;
+            }
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                gap: 50px;
+            }
+            .agri-card {
+                box-shadow: none;
+                border: 1px solid #999;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Agri Card (किसान कार्ड) जेनरेटर</h2>
+
+    <div class="container">
+        
+        <div class="form-container">
+            <h3 style="margin-top:0; color:var(--primary-green);">विवरण दर्ज करें</h3>
+            
+            <div class="form-group">
+                <label>फोटो अपलोड करें</label>
+                <input type="file" id="inputPhoto" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>Name (English)</label>
+                <input type="text" id="inputNameEn" value="Sushila Devi">
+            </div>
+            <div class="form-group">
+                <label>नाम (हिंदी)</label>
+                <input type="text" id="inputNameHi" value="सुशीला देवी">
+            </div>
+            <div class="form-group">
+                <label>जन्म तिथि (DD/MM/YY)</label>
+                <input type="text" id="inputDob" value="01/01/64">
+            </div>
+            <div class="form-group">
+                <label>लिंग (Gender)</label>
+                <select id="inputGender">
+                    <option value="Female" selected>Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>मोबाइल नंबर</label>
+                <input type="text" id="inputMobile" value="7209136840">
+            </div>
+            <div class="form-group">
+                <label>आधार नंबर</label>
+                <input type="text" id="inputAadhar" value="579156451334">
+            </div>
+            <div class="form-group">
+                <label>Farmer ID</label>
+                <input type="text" id="inputFarmerId" value="80869166297">
+            </div>
+            <div class="form-group">
+                <label>पूरा पता (Back Side)</label>
+                <input type="text" id="inputAddress" value="Village - Mahuar, Post- Sahuka , Dist. - Kaimur, Bihar">
+            </div>
+
+            <h4 style="color:var(--primary-green); margin-bottom:5px;">जमीन विवरण तालिका (Row 1)</h4>
+            <div class="table-input-group">
+                <input type="text" id="t1SubDist" placeholder="Sub Dist (e.g. MOHANIA)" value="MOHANIA" style="margin-bottom:5px;">
+                <input type="text" id="t1Sno" placeholder="S.No" value="3696" style="width:48%; margin-right:2%;">
+                <input type="text" id="t1Area" placeholder="Area" value="0.008000" style="width:48%;">
+            </div>
+
+            <h4 style="color:var(--primary-green); margin-bottom:5px;">जमीन विवरण तालिका (Row 2)</h4>
+            <div class="table-input-group">
+                <input type="text" id="t2SubDist" placeholder="Sub Dist" value="MOHANIA" style="margin-bottom:5px;">
+                <input type="text" id="t2Sno" placeholder="S.No" value="3697" style="width:48%; margin-right:2%;">
+                <input type="text" id="t2Area" placeholder="Area" value="0.006000" style="width:48%;">
+            </div>
+
+            <button class="print-btn" onclick="window.print()">Card प्रिंट / PDF सेव करें</button>
+        </div>
+
+        <div class="preview-container">
+            
+            <div class="agri-card" id="cardFront">
+                <div class="card-header">
+                    <div class="logo-area">Agri <span>Card</span></div>
+                    <div class="header-title-hi">मेरा किसान कार्ड</div>
+                </div>
+
+                <div class="card-body-front">
+                    <div class="photo-box">
+                        <img id="cardPhoto" src="https://via.placeholder.com/105x125?text=Photo" alt="Farmer Photo">
+                    </div>
+                    <div class="details-box">
+                        <div class="farmer-name-en" id="cardNameEn">Sushila Devi</div>
+                        <div class="farmer-name-hi" id="cardNameHi">सुशीला देवी</div>
+                        
+                        <table class="info-table">
+                            <tr>
+                                <td class="label">जन्म:</td>
+                                <td class="value" id="cardDob">01/01/64</td>
+                            </tr>
+                            <tr>
+                                <td class="label">लिंग:</td>
+                                <td class="value" id="cardGender">Female</td>
+                            </tr>
+                            <tr>
+                                <td class="label">मोबाईल:</td>
+                                <td class="value" id="cardMobile">7209136840</td>
+                            </tr>
+                            <tr>
+                                <td class="label">आधार:</td>
+                                <td class="value" id="cardAadhar">579156451334</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=80869166297" id="cardQr" alt="QR Code">
+                    </div>
+                </div>
+
+                <div class="farmer-id-bar">
+                    Farmer Id: <span id="cardFarmerId">80869166297</span>
+                </div>
+
+                <div class="card-footer">
+                    <div>This card is only for personal use not for Govt. issue card.</div>
+                    <div class="footer-right">फार्मर <span>आईडी</span></div>
+                </div>
+            </div>
+
+            <div class="agri-card" id="cardBack">
+                <div class="card-header">
+                    <div class="logo-area">Agri <span>Card</span></div>
+                </div>
+
+                <div class="address-text">
+                    <span>पता:</span> <span id="cardAddress" style="color:#222;">Village - Mahuar, Post- Sahuka , Dist. - Kaimur, Bihar</span>
+                </div>
+
+                <div class="data-table-container">
+                    <table class="land-table">
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>District</th>
+                                <th>Sub Dist</th>
+                                <th>Vill</th>
+                                <th>S.No</th>
+                                <th>S/S</th>
+                                <th>Area</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>BIHAR</td>
+                                <td>KAIMUR</td>
+                                <td id="cardT1Sub">MOHANIA</td>
+                                <td>MAHUAR</td>
+                                <td id="cardT1Sno">3696</td>
+                                <td>*</td>
+                                <td class="area-col" id="cardT1Area">0.008000</td>
+                            </tr>
+                            <tr>
+                                <td>BIHAR</td>
+                                <td>KAIMUR</td>
+                                <td id="cardT2Sub">MOHANIA</td>
+                                <td>MAHUAR</td>
+                                <td id="cardT2Sno">3697</td>
+                                <td>*</td>
+                                <td class="area-col" id="cardT2Area">0.006000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-footer">
+                    <div>This card is only for personal use not for Govt. issue card.</div>
+                    <div class="footer-right">फार्मर <span>आईडी</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const inputPhoto = document.getElementById('inputPhoto');
+        const inputNameEn = document.getElementById('inputNameEn');
+        const inputNameHi = document.getElementById('inputNameHi');
+        const inputDob = document.getElementById('inputDob');
+        const inputGender = document.getElementById('inputGender');
+        const inputMobile = document.getElementById('inputMobile');
+        const inputAadhar = document.getElementById('inputAadhar');
+        const inputFarmerId = document.getElementById('inputFarmerId');
+        const inputAddress = document.getElementById('inputAddress');
+
+        const t1SubDist = document.getElementById('t1SubDist');
+        const t1Sno = document.getElementById('t1Sno');
+        const t1Area = document.getElementById('t1Area');
+        
+        const t2SubDist = document.getElementById('t2SubDist');
+        const t2Sno = document.getElementById('t2Sno');
+        const t2Area = document.getElementById('t2Area');
+
+        // Card Preview Elements
+        const cardPhoto = document.getElementById('cardPhoto');
+        const cardNameEn = document.getElementById('cardNameEn');
+        const cardNameHi = document.getElementById('cardNameHi');
+        const cardDob = document.getElementById('cardDob');
+        const cardGender = document.getElementById('cardGender');
+        const cardMobile = document.getElementById('cardMobile');
+        const cardAadhar = document.getElementById('cardAadhar');
+        const cardFarmerId = document.getElementById('cardFarmerId');
+        const cardQr = document.getElementById('cardQr');
+        const cardAddress = document.getElementById('cardAddress');
+
+        const cardT1Sub = document.getElementById('cardT1Sub');
+        const cardT1Sno = document.getElementById('cardT1Sno');
+        const cardT1Area = document.getElementById('cardT1Area');
+
+        const cardT2Sub = document.getElementById('cardT2Sub');
+        const cardT2Sno = document.getElementById('cardT2Sno');
+        const cardT2Area = document.getElementById('cardT2Area');
+
+        // Event Listeners for Live Sync
+        inputNameEn.addEventListener('input', () => cardNameEn.textContent = inputNameEn.value);
+        inputNameHi.addEventListener('input', () => cardNameHi.textContent = inputNameHi.value);
+        inputDob.addEventListener('input', () => cardDob.textContent = inputDob.value);
+        inputGender.addEventListener('change', () => cardGender.textContent = inputGender.value);
+        inputMobile.addEventListener('input', () => cardMobile.textContent = inputMobile.value);
+        inputAadhar.addEventListener('input', () => cardAadhar.textContent = inputAadhar.value);
+        
+        inputFarmerId.addEventListener('input', () => {
+            cardFarmerId.textContent = inputFarmerId.value;
+            // Dynamically update QR code based on Farmer ID
+            cardQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(inputFarmerId.value)}`;
+        });
+
+        inputAddress.addEventListener('input', () => cardAddress.textContent = inputAddress.value);
+
+        // Table Row 1 Sync
+        t1SubDist.addEventListener('input', () => cardT1Sub.textContent = t1SubDist.value.toUpperCase());
+        t1Sno.addEventListener('input', () => cardT1Sno.textContent = t1Sno.value);
+        t1Area.addEventListener('input', () => cardT1Area.textContent = t1Area.value);
+
+        // Table Row 2 Sync
+        t2SubDist.addEventListener('input', () => cardT2Sub.textContent = t2SubDist.value.toUpperCase());
+        t2Sno.addEventListener('input', () => cardT2Sno.textContent = t2Sno.value);
+        t2Area.addEventListener('input', () => cardT2Area.textContent = t2Area.value);
+
+        // Image Upload Handling
+        inputPhoto.addEventListen
